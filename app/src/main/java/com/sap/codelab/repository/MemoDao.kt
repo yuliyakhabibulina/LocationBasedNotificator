@@ -10,7 +10,7 @@ import com.sap.codelab.model.Memo
  * The Dao representation of a Memo.
  */
 @Dao
-internal interface MemoDao {
+interface MemoDao {
 
     /**
      * @return all memos that are currently in the database.

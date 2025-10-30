@@ -5,7 +5,7 @@ import com.sap.codelab.model.Memo
 /**
  * Interface for a repository offering memo related CRUD operations.
  */
-internal interface IMemoRepository {
+interface IMemoRepository {
 
     /**
      * Saves the given memo to the database.

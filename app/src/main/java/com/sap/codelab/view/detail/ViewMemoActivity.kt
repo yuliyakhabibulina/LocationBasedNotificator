@@ -2,7 +2,7 @@ package com.sap.codelab.view.detail
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.sap.codelab.databinding.ActivityViewMemoBinding
 import com.sap.codelab.model.Memo
@@ -13,18 +13,24 @@ internal const val BUNDLE_MEMO_ID: String = "memoId"
 /**
  * Activity that allows a user to see the details of a memo.
  */
-internal class ViewMemo : AppCompatActivity() {
+internal class ViewMemoActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityViewMemoBinding
+    private var _binding: ActivityViewMemoBinding? = null
+    private val binding get() = _binding!!
+
+    private val model: ViewMemoViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityViewMemoBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
-        // Initialize views with the passed memo id
-        val model = ViewModelProvider(this)[ViewMemoViewModel::class.java]
-        if (savedInstanceState == null) {
+
+        _binding = ActivityViewMemoBinding.inflate(layoutInflater)
+        val id = intent.getLongExtra(BUNDLE_MEMO_ID, -1)
+
+        model.loadMemo(id)
+
+          if (savedInstanceState == null) {
             // Observe the memo state flow for changes
             lifecycleScope.launch {
                 model.memo.collect { value ->
@@ -34,9 +40,14 @@ internal class ViewMemo : AppCompatActivity() {
                     }
                 }
             }
-            val id = intent.getLongExtra(BUNDLE_MEMO_ID, -1)
-            model.loadMemo(id)
+
+
         }
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 
     /**

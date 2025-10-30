@@ -8,46 +8,49 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.lifecycle.ViewModelProvider
+import androidx.activity.viewModels
 import androidx.lifecycle.coroutineScope
 import com.sap.codelab.R
 import com.sap.codelab.databinding.ActivityHomeBinding
 import com.sap.codelab.model.Memo
-import com.sap.codelab.view.create.CreateMemo
+import com.sap.codelab.view.create.CreateMemoActivity
 import com.sap.codelab.view.detail.BUNDLE_MEMO_ID
-import com.sap.codelab.view.detail.ViewMemo
+import com.sap.codelab.view.detail.ViewMemoActivity
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 /**
  * The main activity of the app. Shows a list of recorded memos and lets the user add new memos.
  */
-internal class Home : AppCompatActivity() {
+@AndroidEntryPoint
+class HomeActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityHomeBinding
-    private lateinit var model: HomeViewModel
+    private var _binding: ActivityHomeBinding? = null
+    private val binding get() = _binding!!
+
+    private val viewModel: HomeViewModel by viewModels()
+
     private lateinit var menuItemShowAll: MenuItem
     private lateinit var menuItemShowOpen: MenuItem
     private val createMemoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
-            model.refreshMemos()
+            viewModel.refreshMemos()
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityHomeBinding.inflate(layoutInflater)
+        _binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
-        model = ViewModelProvider(this)[HomeViewModel::class.java]
-
         // Setup the adapter and the recycler view
         setupRecyclerView(initializeAdapter())
 
         binding.fab.setOnClickListener {
             // Handles clicks on the FAB button > creates a new Memo
-            createMemoLauncher.launch(Intent(this@Home, CreateMemo::class.java))
+            createMemoLauncher.launch(Intent(this@HomeActivity, CreateMemoActivity::class.java))
         }
-        model.loadOpenMemos()
+        viewModel.loadOpenMemos()
     }
 
     /**
@@ -59,11 +62,11 @@ internal class Home : AppCompatActivity() {
             showMemo((view.tag as Memo).id)
         }, { checkbox, isChecked ->
             // Implementation for when the user marks a memo as completed
-            model.updateMemo(checkbox.tag as Memo, isChecked)
-            model.refreshMemos()
+            viewModel.updateMemo(checkbox.tag as Memo, isChecked)
+            viewModel.refreshMemos()
         })
         lifecycle.coroutineScope.launch {
-            model.memos.collect { memos ->
+            viewModel.memos.collect { memos ->
                 adapter.setItems(memos)
             }
         }
@@ -76,7 +79,7 @@ internal class Home : AppCompatActivity() {
      * @param memoId    - the id of the memo to be shown.
      */
     private fun showMemo(memoId: Long) {
-        val intent = Intent(this@Home, ViewMemo::class.java)
+        val intent = Intent(this@HomeActivity, ViewMemoActivity::class.java)
         intent.putExtra(BUNDLE_MEMO_ID, memoId)
         startActivity(intent)
     }
@@ -86,9 +89,9 @@ internal class Home : AppCompatActivity() {
      */
     private fun setupRecyclerView(adapter: MemoAdapter) {
         binding.contentHome.recyclerView.apply {
-            layoutManager = LinearLayoutManager(this@Home, LinearLayoutManager.VERTICAL, false)
+            layoutManager = LinearLayoutManager(this@HomeActivity, LinearLayoutManager.VERTICAL, false)
             this.adapter = adapter
-            addItemDecoration(DividerItemDecoration(this@Home, (layoutManager as LinearLayoutManager).orientation))
+            addItemDecoration(DividerItemDecoration(this@HomeActivity, (layoutManager as LinearLayoutManager).orientation))
         }
     }
 
@@ -105,14 +108,14 @@ internal class Home : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_show_all -> {
-                model.loadAllMemos()
+                viewModel.loadAllMemos()
                 //Switch available menu options
                 menuItemShowAll.isVisible = false
                 menuItemShowOpen.isVisible = true
                 true
             }
             R.id.action_show_open -> {
-                model.loadOpenMemos()
+                viewModel.loadOpenMemos()
                 //Switch available menu options
                 menuItemShowOpen.isVisible = false
                 menuItemShowAll.isVisible = true

@@ -12,6 +12,10 @@ buildscript {
         classpath "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:2.2.10-2.0.2"
     }
 }
+plugins {
+
+    id 'com.google.dagger.hilt.android' version '2.55' apply false
+}
 
 allprojects {
     repositories {

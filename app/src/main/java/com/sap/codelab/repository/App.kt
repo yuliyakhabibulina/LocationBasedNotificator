@@ -1,13 +1,14 @@
 package com.sap.codelab.repository
 
 import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 
 /**
  * Extension of the Android Application class.
  */
+@HiltAndroidApp
 internal class App : Application() {
     override fun onCreate() {
         super.onCreate()
-        Repository.initialize(this)
     }
 }
