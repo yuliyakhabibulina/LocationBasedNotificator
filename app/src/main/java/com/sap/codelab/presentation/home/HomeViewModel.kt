@@ -2,8 +2,10 @@ package com.sap.codelab.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sap.codelab.model.Memo
-import com.sap.codelab.repository.IMomoRepositoryImpl
+import com.sap.codelab.domain.model.Memo
+import com.sap.codelab.domain.usecases.GetAllMemoUseCase
+import com.sap.codelab.domain.usecases.GetOpenUseCase
+import com.sap.codelab.domain.usecases.SaveMemoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +19,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
-        private val repository: IMomoRepositoryImpl
+    private val getAllMemoUseCase: GetAllMemoUseCase,
+    private val getOpenUseCase: GetOpenUseCase,
+    private val saveMemoUseCase: SaveMemoUseCase
 ) : ViewModel() {
 
     private var isShowAll = false
@@ -32,7 +36,8 @@ internal class HomeViewModel @Inject constructor(
     fun loadAllMemos() {
         isShowAll = true
         viewModelScope.launch(Dispatchers.IO) {
-            _memos.value = repository.getAll()
+            getAllMemoUseCase.invoke()
+                .collect {memo -> _memos.value = memo }
         }
     }
 
@@ -42,7 +47,8 @@ internal class HomeViewModel @Inject constructor(
     fun loadOpenMemos() {
         isShowAll = false
         viewModelScope.launch(Dispatchers.IO) {
-            _memos.value = repository.getOpen()
+            getOpenUseCase.invoke()
+                .collect {memo -> _memos.value = memo }
         }
     }
 
@@ -57,17 +63,16 @@ internal class HomeViewModel @Inject constructor(
     /**
      * Updates the given memo, marking it as done if isChecked is true.
      *
-     * @param memo      - the memo to update.
+     * @param memoEntity      - the memo to update.
      * @param isChecked - whether the memo has been checked (marked as done).
      */
-    fun updateMemo(memo: Memo, isChecked: Boolean) {
+    fun updateMemo(memoEntity: Memo, isChecked: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             // We'll only forward the update if the memo has been checked, since we don't offer to uncheck memos right now
             if (isChecked) {
-                repository.saveMemo(memo.copy(isDone = true))
+                saveMemoUseCase.invoke(memoEntity.copy(isDone = true))
             }
         }
+
     }
-
-
 }

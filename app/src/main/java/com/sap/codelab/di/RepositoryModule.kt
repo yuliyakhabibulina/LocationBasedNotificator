@@ -1,7 +1,7 @@
 package com.sap.codelab.di
 
-import com.sap.codelab.repository.IMemoRepository
-import com.sap.codelab.repository.IMomoRepositoryImpl
+import com.sap.codelab.domain.repository.MemoRepository
+import com.sap.codelab.data.repository.MemoRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -13,5 +13,5 @@ import javax.inject.Singleton
 internal abstract class RepositoryModule {
     @Binds
     @Singleton
-    abstract fun bindMemoRepository(memoRepositoryImpl: IMomoRepositoryImpl): IMemoRepository
+    abstract fun bindMemoRepository(memoRepositoryImpl: MemoRepositoryImpl): MemoRepository
 }

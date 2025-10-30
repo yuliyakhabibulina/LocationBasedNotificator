@@ -2,7 +2,7 @@ package com.sap.codelab.presentation.home
 
 import androidx.recyclerview.widget.RecyclerView
 import com.sap.codelab.databinding.ItemMemoBinding
-import com.sap.codelab.model.Memo
+import com.sap.codelab.domain.model.Memo
 
 /**
  * View holder for Memos.

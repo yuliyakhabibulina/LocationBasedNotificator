@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.sap.codelab.databinding.ActivityViewMemoBinding
-import com.sap.codelab.model.Memo
+import com.sap.codelab.domain.model.Memo
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
@@ -21,7 +21,6 @@ class ViewMemoFragment : Fragment() {
 
     private val model: ViewMemoViewModel by viewModels()
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,8 +31,6 @@ class ViewMemoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-//        model.loadMemo(args.memoId)
 
         lifecycleScope.launch {
             model.memo.collect { value ->

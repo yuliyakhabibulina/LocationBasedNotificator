@@ -2,8 +2,8 @@ package com.sap.codelab.presentation.create
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sap.codelab.model.Memo
-import com.sap.codelab.repository.IMomoRepositoryImpl
+import com.sap.codelab.domain.model.Memo
+import com.sap.codelab.domain.usecases.SaveMemoUseCase
 import com.sap.codelab.utils.extensions.getEmptyString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +15,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 internal class CreateMemoViewModel @Inject constructor(
-    private val repository: IMomoRepositoryImpl
+    private val saveMemoUseCase: SaveMemoUseCase
 ) : ViewModel() {
 
     private var memo = Memo(0, getEmptyString(), getEmptyString(), 0, 0, 0, false)
@@ -25,7 +25,7 @@ internal class CreateMemoViewModel @Inject constructor(
      */
     fun saveMemo() {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.saveMemo(memo)
+            saveMemoUseCase.invoke(memo.copy(isDone = true))
         }
     }
 

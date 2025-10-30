@@ -2,8 +2,8 @@ package com.sap.codelab.presentation.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sap.codelab.model.Memo
-import com.sap.codelab.repository.IMomoRepositoryImpl
+import com.sap.codelab.domain.model.Memo
+import com.sap.codelab.domain.usecases.GetMemoByIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +16,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 internal class ViewMemoViewModel @Inject constructor(
-        private val repository: IMomoRepositoryImpl
+        private val getMemoByIdUseCase: GetMemoByIdUseCase
 ) : ViewModel() {
 
     private val _memo: MutableStateFlow<Memo?> = MutableStateFlow(null)
@@ -27,7 +27,7 @@ internal class ViewMemoViewModel @Inject constructor(
      */
     fun loadMemo(memoId: Long) {
         viewModelScope.launch(Dispatchers.Default) {
-            _memo.value = repository.getMemoById(memoId)
+            _memo.value = getMemoByIdUseCase.invoke(memoId)
         }
     }
 }

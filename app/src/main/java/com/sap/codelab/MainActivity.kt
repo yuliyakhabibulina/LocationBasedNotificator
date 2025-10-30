@@ -1,4 +1,4 @@
-package com.sap.codelab.presentation.home
+package com.sap.codelab
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -6,7 +6,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.sap.codelab.R
 import com.sap.codelab.databinding.ActivityHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 

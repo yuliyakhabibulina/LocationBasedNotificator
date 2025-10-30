@@ -3,14 +3,14 @@
     package="com.sap.codelab">
 
     <application
-        android:name=".repository.App"
+        android:name=".App"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.sap.codelab.presentation.home.MainActivity"
+            android:name="com.sap.codelab.MainActivity"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.sap.codelab.databinding.ItemMemoBinding
-import com.sap.codelab.model.Memo
+import com.sap.codelab.domain.model.Memo
 
 /**
  * Adapter containing a set of memos.

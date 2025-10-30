@@ -1,13 +1,13 @@
-package com.sap.codelab.repository
+package com.sap.codelab.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.sap.codelab.model.Memo
+import com.sap.codelab.data.model.MemoEntity
 
 /**
  * That database that is used to store information.
  */
-@Database(entities = [Memo::class], version = 1, exportSchema = false)
+@Database(entities = [MemoEntity::class], version = 1, exportSchema = false)
 abstract class MemoDatabase : RoomDatabase() {
     abstract fun getMemoDao(): MemoDao
 }
