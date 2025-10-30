@@ -1,4 +1,4 @@
-package com.sap.codelab.presentation.detail
+package com.sap.codelab.presentation.viewMemo
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,12 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.sap.codelab.databinding.FragmentViewMemoBinding
 import com.sap.codelab.domain.model.Memo
+import com.sap.codelab.utils.extensions.collectFlow
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import kotlin.getValue
 
 @AndroidEntryPoint
@@ -38,12 +37,10 @@ class ViewMemoFragment : Fragment() {
         observeViewModel()
     }
 
-    private fun observeViewModel() {
-        lifecycleScope.launch {
-            viewModel.memo.collect { value ->
-                value?.let { memo ->
-                    updateUI(memo)
-                }
+    private fun observeViewModel() = with(viewModel){
+        collectFlow(memo) { value ->
+            value?.let { memo ->
+                updateUI(memo)
             }
         }
     }
