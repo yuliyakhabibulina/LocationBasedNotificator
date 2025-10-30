@@ -18,7 +18,7 @@ internal class CreateMemoViewModel @Inject constructor(
     private val saveMemoUseCase: SaveMemoUseCase
 ) : ViewModel() {
 
-    private var memo = Memo(0, getEmptyString(), getEmptyString(), 0, 0, 0, false)
+    private var memo = Memo(0, getEmptyString(), getEmptyString(), 0, 0F, 0F, false)
 
     /**
      * Saves the memo in it's current state.
@@ -38,8 +38,8 @@ internal class CreateMemoViewModel @Inject constructor(
             description = description,
             id = 0,
             reminderDate = 0,
-            reminderLatitude = 0,
-            reminderLongitude = 0,
+            reminderLatitude = 0F,
+            reminderLongitude = 0F,
             isDone = false
         )
     }

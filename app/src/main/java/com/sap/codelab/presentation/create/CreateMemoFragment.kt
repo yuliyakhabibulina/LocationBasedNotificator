@@ -14,7 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class CreateMemoFragment : Fragment() {
 
-    private var _binding: FragmentCreateMemoBinding ? = null
+    private var _binding: FragmentCreateMemoBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: CreateMemoViewModel by viewModels()
@@ -43,7 +43,6 @@ class CreateMemoFragment : Fragment() {
                 saveMemo()
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -51,18 +50,16 @@ class CreateMemoFragment : Fragment() {
     /**
      * Saves the memo if the input is valid; otherwise shows the corresponding error messages.
      */
-    private fun saveMemo() {
-        binding.run {
-            viewModel.updateMemo(memoTitle.text.toString(), memoDescription.text.toString())
-            if (viewModel.isMemoValid()) {
-                viewModel.saveMemo()
-                findNavController().popBackStack()
-            } else {
-                memoTitleContainer.error =
-                    getErrorMessage(viewModel.hasTitleError(), R.string.memo_title_empty_error)
-                memoDescriptionContainer.error =
-                    getErrorMessage(viewModel.hasTextError(), R.string.memo_text_empty_error)
-            }
+    private fun saveMemo() = with(binding) {
+        viewModel.updateMemo(memoTitle.text.toString(), memoDescription.text.toString())
+        if (viewModel.isMemoValid()) {
+            viewModel.saveMemo()
+            findNavController().popBackStack()
+        } else {
+            memoTitleContainer.error =
+                getErrorMessage(viewModel.hasTitleError(), R.string.memo_title_empty_error)
+            memoDescriptionContainer.error =
+                getErrorMessage(viewModel.hasTextError(), R.string.memo_text_empty_error)
         }
     }
 

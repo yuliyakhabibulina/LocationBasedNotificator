@@ -5,7 +5,7 @@ data class Memo(
     val title: String,
     val description: String,
     val reminderDate: Long = 0,
-    val reminderLatitude: Long,
-    val reminderLongitude: Long,
+    val reminderLatitude: Float,
+    val reminderLongitude: Float,
     val isDone: Boolean = false
 )

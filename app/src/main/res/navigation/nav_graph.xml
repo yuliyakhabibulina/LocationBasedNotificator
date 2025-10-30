@@ -9,7 +9,7 @@
         android:id="@+id/homeFragment"
         android:name="com.sap.codelab.presentation.home.HomeFragment"
         android:label="HomeFragment"
-        tools:layout="@layout/content_home">
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_createMemoFragment"
             app:destination="@id/createMemoFragment" />
@@ -28,7 +28,7 @@
         android:id="@+id/viewMemoFragment"
         android:name="com.sap.codelab.presentation.detail.ViewMemoFragment"
         android:label="fragment_view_memo"
-        tools:layout="@layout/activity_view_memo">
+        tools:layout="@layout/fragment_view_memo">
         <argument
             android:name="memoId"
             app:argType="long" />

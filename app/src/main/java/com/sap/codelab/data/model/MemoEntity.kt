@@ -17,11 +17,11 @@ data class MemoEntity(
     @ColumnInfo(name = "description")
     var description: String,
     @ColumnInfo(name = "reminderDate")
-    var reminderDate: Long,
+    var reminderDate: Long,         // for deleting
     @ColumnInfo(name = "reminderLatitude")
-    var reminderLatitude: Long,
+    var reminderLatitude: Float,
     @ColumnInfo(name = "reminderLongitude")
-    var reminderLongitude: Long,
+    var reminderLongitude: Float,
     @ColumnInfo(name = "isDone")
     var isDone: Boolean = false
 )

@@ -6,7 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.sap.codelab.databinding.ActivityHomeBinding
+import com.sap.codelab.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -15,14 +15,14 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private var _binding: ActivityHomeBinding? = null
+    private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityHomeBinding.inflate(layoutInflater)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)

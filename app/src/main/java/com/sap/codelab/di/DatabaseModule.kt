@@ -8,7 +8,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Singleton
-
 import com.sap.codelab.data.database.MemoDatabase
 import dagger.hilt.components.SingletonComponent
 
