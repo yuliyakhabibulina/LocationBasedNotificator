@@ -1,4 +1,4 @@
-package com.sap.codelab.view.create
+package com.sap.codelab.presentation.create
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

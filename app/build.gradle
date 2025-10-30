@@ -50,6 +50,7 @@ ext {
     lifecycleVersion = '2.9.3'
 
 }
+apply plugin: "androidx.navigation.safeargs.kotlin"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

@@ -1,4 +1,4 @@
-package com.sap.codelab.view.create
+package com.sap.codelab.presentation.create
 
 import android.os.Bundle
 import android.view.*

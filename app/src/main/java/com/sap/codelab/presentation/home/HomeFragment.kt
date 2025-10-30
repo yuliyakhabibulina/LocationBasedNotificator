@@ -1,6 +1,5 @@
-package com.sap.codelab.view.home
+package com.sap.codelab.presentation.home
 
-import android.app.Activity.RESULT_OK
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -8,11 +7,11 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.coroutineScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sap.codelab.R
@@ -34,8 +33,13 @@ class HomeFragment : Fragment() {
 
     private val memoAdapter: MemoAdapter by lazy {
         MemoAdapter(
-            onMemoClick = viewModel::onMemoClicked,
-            onCheckedChange = viewModel::onMemoCheckedChanged
+            onMemoClick = { item ->
+                val action = HomeFragmentDirections.actionNavHomeFragmentToNavMemoDetailsFragment(item)
+                findNavController().navigate(action) },
+
+            onCheckedChange = { memo, isChecked ->
+                viewModel.updateMemo(memo, isChecked)
+            }
         )
     }
 
@@ -53,7 +57,6 @@ class HomeFragment : Fragment() {
         setHasOptionsMenu(true)
 
         viewModel.loadOpenMemos()
-        // Setup the adapter and the recycler view
         setupRecyclerView()
         observeViewmodel()
         setupFab()
@@ -91,19 +94,6 @@ class HomeFragment : Fragment() {
             it.findNavController().navigate(R.id.action_homeFragment_to_createMemoFragment)
         }
     }
-
-    /**
-     * Opens the Memo detail view for the given memoId.
-     *
-     * @param memoId    - the id of the memo to be shown.
-     */
-    private fun showMemo(memoId: Long) {
-//        val intent = Intent(activity, ViewMemoActivity::class.java)
-//        intent.putExtra(BUNDLE_MEMO_ID, memoId)
-//        startActivity(intent)
-    }
-
-
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

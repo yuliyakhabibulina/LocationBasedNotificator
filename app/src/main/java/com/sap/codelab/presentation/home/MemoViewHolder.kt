@@ -1,4 +1,4 @@
-package com.sap.codelab.view.home
+package com.sap.codelab.presentation.home
 
 import androidx.recyclerview.widget.RecyclerView
 import com.sap.codelab.databinding.ItemMemoBinding

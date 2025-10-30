@@ -1,4 +1,4 @@
-package com.sap.codelab.view.home
+package com.sap.codelab.presentation.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

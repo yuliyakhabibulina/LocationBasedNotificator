@@ -1,4 +1,4 @@
-package com.sap.codelab.view.detail
+package com.sap.codelab.presentation.detail
 
 import android.os.Bundle
 import android.view.LayoutInflater

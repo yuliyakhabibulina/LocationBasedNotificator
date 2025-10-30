@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.sap.codelab.view.home.MainActivity"
+            android:name="com.sap.codelab.presentation.home.MainActivity"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
