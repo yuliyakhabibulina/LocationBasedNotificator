@@ -1,43 +1,42 @@
 package com.sap.codelab.view.create
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import android.view.Menu
-
-import android.view.MenuItem
-import androidx.activity.viewModels
+import android.view.*
 import androidx.annotation.StringRes
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.sap.codelab.R
-import com.sap.codelab.databinding.ActivityCreateMemoBinding
+import com.sap.codelab.databinding.FragmentCreateMemoBinding
 import com.sap.codelab.utils.extensions.getEmptyString
 import dagger.hilt.android.AndroidEntryPoint
 
-/**
- * Activity that allows a user to create a new Memo.
- */
 @AndroidEntryPoint
-class CreateMemoActivity : AppCompatActivity() {
+class CreateMemoFragment : Fragment() {
 
-    private var _binding: ActivityCreateMemoBinding? = null
+    private var _binding: FragmentCreateMemoBinding ? = null
     private val binding get() = _binding!!
 
     private val viewModel: CreateMemoViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        _binding = ActivityCreateMemoBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentCreateMemoBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_create_memo, menu)
-        return true
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
-    /**
-     * Handles actionbar interactions.
-     */
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_create_memo, menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_save -> {
@@ -49,24 +48,19 @@ class CreateMemoActivity : AppCompatActivity() {
         }
     }
 
-    override fun onDestroy() {
-        _binding = null
-        super.onDestroy()
-    }
     /**
      * Saves the memo if the input is valid; otherwise shows the corresponding error messages.
      */
     private fun saveMemo() {
-        binding.contentCreateMemo.run {
+        binding.run {
             viewModel.updateMemo(memoTitle.text.toString(), memoDescription.text.toString())
             if (viewModel.isMemoValid()) {
                 viewModel.saveMemo()
-                setResult(RESULT_OK)
-                finish()
+                findNavController().popBackStack()
             } else {
                 memoTitleContainer.error =
                     getErrorMessage(viewModel.hasTitleError(), R.string.memo_title_empty_error)
-                memoDescription.error =
+                memoDescriptionContainer.error =
                     getErrorMessage(viewModel.hasTextError(), R.string.memo_text_empty_error)
             }
         }
@@ -85,5 +79,10 @@ class CreateMemoActivity : AppCompatActivity() {
         } else {
             getEmptyString()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

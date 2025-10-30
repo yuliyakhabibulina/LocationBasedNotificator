@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.sap.codelab.view.home.HomeActivity"
+            android:name="com.sap.codelab.view.home.MainActivity"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -19,15 +19,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.sap.codelab.view.create.CreateMemoActivity"
-            android:exported="false"
-            android:label="@string/new_memo"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name="com.sap.codelab.view.detail.ViewMemoActivity"
-            android:exported="false"
-            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

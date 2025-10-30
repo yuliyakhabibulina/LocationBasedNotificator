@@ -21,15 +21,19 @@ internal class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var isShowAll = false
+
     private val _memos: MutableStateFlow<List<Memo>> = MutableStateFlow(listOf())
     val memos: StateFlow<List<Memo>> = _memos
 
+    init {
+        loadAllMemos()
+    }
     /**
      * Loads all memos.
      */
     fun loadAllMemos() {
         isShowAll = true
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(Dispatchers.IO) {
             _memos.value = repository.getAll()
         }
     }
@@ -39,7 +43,7 @@ internal class HomeViewModel @Inject constructor(
      */
     fun loadOpenMemos() {
         isShowAll = false
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(Dispatchers.IO) {
             _memos.value = repository.getOpen()
         }
     }
@@ -66,4 +70,35 @@ internal class HomeViewModel @Inject constructor(
             }
         }
     }
+
+    /**
+     * Handles the user action of clicking on a memo in the list.
+     * Emits a navigation event to the UI.
+     * @param memoId The ID of the clicked memo.
+     */
+    fun onMemoClicked(memoId: Long) {
+       // emitUiEvent(HomeContract.HomeUiEvent.NavigateToMemoDetail(memoId))
+    }
+
+    /**
+     * Handles the user action of checking/unchecking a memo's completion status.
+     * Updates the memo status and handles potential errors.
+     * @param memo The memo to update.
+     * @param isChecked The new checked status.
+     */
+    fun onMemoCheckedChanged(memo: Memo, isChecked: Boolean) {
+        viewModelScope.launch {
+//            _uiState.update { it.copy(isLoading = true, error = null) }
+//            try {
+//                if (isChecked) {
+//                    saveMemoUseCase(memo.copy(isDone = true))
+//                }
+//                _uiState.update { it.copy(isLoading = false) }
+//            } catch (e: Exception) {
+//                _uiState.update { it.copy(isLoading = false, error = R.string.error_message_memo_update_failed) }
+//                emitUiEvent(HomeContract.HomeUiEvent.ShowSnackbar(R.string.error_message_memo_update_failed))
+//            }
+        }
+    }
+
 }
