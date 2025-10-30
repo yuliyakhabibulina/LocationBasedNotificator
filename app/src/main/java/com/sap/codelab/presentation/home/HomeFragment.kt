@@ -7,17 +7,18 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sap.codelab.R
 import com.sap.codelab.databinding.FragmentHomeBinding
+import com.sap.codelab.utils.extensions.collectFlow
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import kotlin.getValue
 
 @AndroidEntryPoint
@@ -34,8 +35,10 @@ class HomeFragment : Fragment() {
     private val memoAdapter: MemoAdapter by lazy {
         MemoAdapter(
             onMemoClick = { item ->
-                val action = HomeFragmentDirections.actionNavHomeFragmentToNavMemoDetailsFragment(item)
-                findNavController().navigate(action) },
+                val action =
+                    HomeFragmentDirections.actionNavHomeFragmentToNavMemoDetailsFragment(item)
+                findNavController().navigate(action)
+            },
 
             onCheckedChange = { memo, isChecked ->
                 viewModel.updateMemo(memo, isChecked)
@@ -53,34 +56,31 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setHasOptionsMenu(true)
-
         viewModel.loadOpenMemos()
+        setupMenu()
         setupRecyclerView()
         observeViewmodel()
         setupFab()
-
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
     /**
      * Observe viewModel
      */
-    private fun observeViewmodel() {
-        lifecycle.coroutineScope.launch {
-            viewModel.memos.collect { memos ->
-                memoAdapter.submitList(memos)
-            }
+    private fun observeViewmodel() = with(viewModel){
+        collectFlow(memos) { memos ->
+            memoAdapter.submitList(memos)
         }
     }
+
     /**
      * Initializes the recycler view to display the list of memos.
      */
-    private fun setupRecyclerView()  {
+    private fun setupRecyclerView() {
         binding.recyclerView.apply {
             adapter = memoAdapter
             layoutManager = LinearLayoutManager(requireContext())
@@ -90,40 +90,48 @@ class HomeFragment : Fragment() {
 
     private fun setupFab() {
         binding.fab.setOnClickListener {
-            // Handles clicks on the FAB button > creates a new Memo
             it.findNavController().navigate(R.id.action_homeFragment_to_createMemoFragment)
         }
     }
 
+    private fun setupMenu() {
+        requireActivity().addMenuProvider(
+            object : MenuProvider {
+                override fun onCreateMenu(
+                    menu: Menu,
+                    menuInflater: MenuInflater
+                ) {
+                    menuInflater.inflate(R.menu.menu_home, menu)
+                    menuItemShowAll = menu.findItem(R.id.action_show_all)
+                    menuItemShowOpen = menu.findItem(R.id.action_show_open)
+                }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_home, menu) // Use the inflater parameter
-        menuItemShowAll = menu.findItem(R.id.action_show_all)
-        menuItemShowOpen = menu.findItem(R.id.action_show_open)
+                override fun onMenuItemSelected(item: MenuItem): Boolean {
+                    return when (item.itemId) {
+                        R.id.action_show_all -> {
+                            viewModel.loadAllMemos()
+                            switchMenu(true)
+                            true
+                        }
+
+                        R.id.action_show_open -> {
+                            viewModel.loadOpenMemos()
+                            switchMenu(false)
+                            true
+                        }
+
+                        else -> false
+                    }
+                }
+            },
+            viewLifecycleOwner,
+            Lifecycle.State.RESUMED
+        )
     }
 
-    /**
-     * Handles actionbar interactions.
-     */
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_show_all -> {
-                viewModel.loadAllMemos()
-                //Switch available menu options
-                menuItemShowAll.isVisible = false
-                menuItemShowOpen.isVisible = true
-                true
-            }
-            R.id.action_show_open -> {
-                viewModel.loadOpenMemos()
-                //Switch available menu options
-                menuItemShowOpen.isVisible = false
-                menuItemShowAll.isVisible = true
-                true
-            }
-
-            else -> super.onOptionsItemSelected(item)
-        }
+    private fun switchMenu(flag: Boolean) {
+        menuItemShowAll.isVisible = !flag
+        menuItemShowOpen.isVisible = flag
     }
+
 }
