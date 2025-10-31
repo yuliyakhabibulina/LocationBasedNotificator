@@ -33,6 +33,23 @@ class CreateMemoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupMenu()
         observeViewModel()
+        setupListeners()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun setupListeners() = with(binding){
+        buttonGetLocation.setOnClickListener {
+            findNavController().navigate(R.id.action_createMemoFragment_to_mapFragment)
+        }
+
+//        setFragmentResultListener(MapFragment.REQUEST_KEY_LOCATION) { _, bundle ->
+//            val location = bundle.getParcelable<LatLng>(MapFragment.BUNDLE_KEY_LOCATION)
+//            location?.let { viewModel.onLocationSelected(it) }
+//        }
     }
 
     private fun observeViewModel() = with(viewModel) {
@@ -77,10 +94,5 @@ class CreateMemoFragment : Fragment() {
             viewLifecycleOwner,
             Lifecycle.State.RESUMED
         )
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }
