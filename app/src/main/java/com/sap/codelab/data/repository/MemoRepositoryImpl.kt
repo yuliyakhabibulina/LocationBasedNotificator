@@ -18,8 +18,8 @@ class MemoRepositoryImpl @Inject constructor(
     private val memoDao: MemoDao
 ) : MemoRepository {
 
-    override suspend fun saveMemo(memo: Memo) {
-        memoDao.insert(memo.toEntity())
+    override suspend fun saveMemo(memo: Memo) : Long {
+        return memoDao.insert(memo.toEntity())
     }
 
     override fun getOpen(): Flow<List<Memo>> = memoDao.getOpen().map { memoEntity ->
@@ -30,5 +30,5 @@ class MemoRepositoryImpl @Inject constructor(
         memoEntity.map { it.fromEntity() }
     }
 
-    override suspend fun getMemoById(id: Long): Memo = memoDao.getMemoById(id).fromEntity()
+    override suspend fun getMemoById(id: Long): Memo? = memoDao.getMemoById(id)?.fromEntity()
 }

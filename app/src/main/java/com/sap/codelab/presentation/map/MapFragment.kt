@@ -124,7 +124,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     companion object {
         const val REQUEST_KEY_LOCATION = "location_request"
         const val BUNDLE_KEY_LOCATION = "selected_location"
-        private val DEFAULT_LAT_LNG = LatLng(49.4, 8.6)
+        private val DEFAULT_LAT_LNG = LatLng(52.13, 21.08)
         private const val DEFAULT_ZOOM_LEVEL = 5f
     }
 }

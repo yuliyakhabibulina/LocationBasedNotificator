@@ -45,8 +45,8 @@ internal class CreateMemoViewModel @Inject constructor(
                     description = description,
                     id = 0,
                     reminderDate = 0,
-                    reminderLatitude = _locationState.value.latitude.toFloat(),
-                    reminderLongitude = _locationState.value.longitude.toFloat(),
+                    reminderLatitude = _locationState.value.latitude,
+                    reminderLongitude = _locationState.value.longitude,
                     isDone = false
                 )
                 saveMemoUseCase.invoke(memo)
