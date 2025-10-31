@@ -2,13 +2,17 @@ package com.sap.codelab.presentation.create
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.maps.model.LatLng
 import com.sap.codelab.R
 import com.sap.codelab.domain.model.Memo
 import com.sap.codelab.domain.usecases.SaveMemoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,6 +30,9 @@ internal class CreateMemoViewModel @Inject constructor(
     private val _navBackEvent = Channel<Boolean>()
     val navBackEvent = _navBackEvent.receiveAsFlow()
 
+    private val _locationState = MutableStateFlow(LatLng(0.0, 0.0))
+    val locationState = _locationState.asStateFlow()
+
     fun onSaveMenuClicked(title: String, description: String) {
         viewModelScope.launch(Dispatchers.IO) {
             if (title.isEmpty()) {
@@ -38,8 +45,8 @@ internal class CreateMemoViewModel @Inject constructor(
                     description = description,
                     id = 0,
                     reminderDate = 0,
-                    reminderLatitude = 0F,
-                    reminderLongitude = 0F,
+                    reminderLatitude = _locationState.value.latitude.toFloat(),
+                    reminderLongitude = _locationState.value.longitude.toFloat(),
                     isDone = false
                 )
                 saveMemoUseCase.invoke(memo)
@@ -48,6 +55,10 @@ internal class CreateMemoViewModel @Inject constructor(
                     }
             }
         }
+    }
+
+    fun onLocationSelected(lng: LatLng) {
+        _locationState.update { LatLng(lng.latitude, lng.longitude) }
     }
 
 }

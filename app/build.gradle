@@ -9,6 +9,15 @@ plugins {
     id 'com.google.dagger.hilt.android'
 }
 
+def getApiKey() {
+    Properties properties = new Properties()
+    def localPropertiesFile = project.rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        properties.load(localPropertiesFile.newDataInputStream())
+    }
+    return properties.getProperty("MAPS_API_KEY", "")
+}
+
 android {
     namespace "com.sap.codelab"
     compileSdk = 36
@@ -18,6 +27,7 @@ android {
         minSdkVersion 27
         versionCode 1
         versionName "1.0"
+        manifestPlaceholders = [ MAPS_API_KEY:"${getApiKey()}" ]
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildTypes {

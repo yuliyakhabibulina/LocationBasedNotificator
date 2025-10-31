@@ -20,6 +20,9 @@ import android.provider.Settings
 import android.net.Uri
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.setFragmentResultListener
+import com.google.android.gms.maps.model.LatLng
+import com.sap.codelab.presentation.map.MapFragment
 
 @AndroidEntryPoint
 class CreateMemoFragment : Fragment() {
@@ -80,10 +83,10 @@ class CreateMemoFragment : Fragment() {
             handlePermissionsRequest()
         }
 
-//        setFragmentResultListener(MapFragment.REQUEST_KEY_LOCATION) { _, bundle ->
-//            val location = bundle.getParcelable<LatLng>(MapFragment.BUNDLE_KEY_LOCATION)
-//            location?.let { viewModel.onLocationSelected(it) }
-//        }
+        setFragmentResultListener(MapFragment.REQUEST_KEY_LOCATION) { _, bundle ->
+            val location = bundle.getParcelable<LatLng>(MapFragment.BUNDLE_KEY_LOCATION)
+            location?.let { viewModel.onLocationSelected(it) }
+        }
     }
 
     private fun observeViewModel() = with(viewModel) {
