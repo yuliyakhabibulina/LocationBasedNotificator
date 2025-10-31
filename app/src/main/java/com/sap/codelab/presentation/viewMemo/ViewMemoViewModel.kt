@@ -2,7 +2,6 @@ package com.sap.codelab.presentation.viewMemo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sap.codelab.domain.model.Memo
 import com.sap.codelab.domain.usecases.GetMemoByIdUseCase
 import com.sap.codelab.presentation.model.MemoUI
 import dagger.hilt.android.lifecycle.HiltViewModel

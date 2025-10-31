@@ -6,11 +6,11 @@ import com.google.android.gms.maps.model.LatLng
 import com.sap.codelab.R
 import com.sap.codelab.domain.usecases.SaveMemoUseCase
 import com.sap.codelab.presentation.model.MemoUI
+import com.sap.codelab.utils.extensions.isEmpty
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -31,14 +31,17 @@ internal class CreateMemoViewModel @Inject constructor(
     val navBackEvent = _navBackEvent.receiveAsFlow()
 
     private val _locationState = MutableStateFlow(LatLng(0.0, 0.0))
-    val locationState = _locationState.asStateFlow()
 
     fun onSaveMenuClicked(title: String, description: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            if (title.isEmpty()) {
-                _errorMessageId.send(R.string.memo_title_empty_error)
-            } else if (description.isEmpty()) {
-                _errorMessageId.send(R.string.memo_text_empty_error)
+            val errorMessage = when {
+                title.isEmpty() -> R.string.memo_title_empty_error
+                description.isEmpty() -> R.string.memo_text_empty_error
+                _locationState.value.isEmpty() -> R.string.memo_location_empty_error
+                else -> null
+            }
+            if (errorMessage != null) {
+                _errorMessageId.send(errorMessage)
             } else {
                 val memo = MemoUI(
                     title = title,

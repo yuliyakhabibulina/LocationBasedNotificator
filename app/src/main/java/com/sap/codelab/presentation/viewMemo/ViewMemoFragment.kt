@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.sap.codelab.databinding.FragmentViewMemoBinding
-import com.sap.codelab.domain.model.Memo
 import com.sap.codelab.presentation.model.MemoUI
 import com.sap.codelab.utils.extensions.collectFlow
 import dagger.hilt.android.AndroidEntryPoint
