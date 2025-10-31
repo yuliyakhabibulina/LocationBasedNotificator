@@ -13,10 +13,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-/**
- * ViewModel for the Home Activity.
- */
-
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
     private val getAllMemoUseCase: GetAllMemoUseCase,
@@ -29,10 +25,6 @@ internal class HomeViewModel @Inject constructor(
     private val _memos: MutableStateFlow<List<Memo>> = MutableStateFlow(listOf())
     val memos: StateFlow<List<Memo>> = _memos
 
-
-    /**
-     * Loads all memos.
-     */
     fun loadAllMemos() {
         isShowAll = true
         viewModelScope.launch(Dispatchers.IO) {
@@ -41,9 +33,6 @@ internal class HomeViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Loads all open (not done) memos.
-     */
     fun loadOpenMemos() {
         isShowAll = false
         viewModelScope.launch(Dispatchers.IO) {
@@ -52,25 +41,16 @@ internal class HomeViewModel @Inject constructor(
         }
     }
 
-    fun refreshMemos() {
-        if (isShowAll) {
-            loadAllMemos()
-        } else {
-            loadOpenMemos()
-        }
-    }
-
     /**
      * Updates the given memo, marking it as done if isChecked is true.
      *
-     * @param memoEntity      - the memo to update.
+     * @param memo      - the memo to update.
      * @param isChecked - whether the memo has been checked (marked as done).
      */
-    fun updateMemo(memoEntity: Memo, isChecked: Boolean) {
+    fun updateMemo(memo: Memo, isChecked: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            // We'll only forward the update if the memo has been checked, since we don't offer to uncheck memos right now
-            if (isChecked) {
-                saveMemoUseCase.invoke(memoEntity.copy(isDone = true))
+             if (isChecked) {
+                saveMemoUseCase.invoke(memo.copy(isDone = true))
             }
         }
 

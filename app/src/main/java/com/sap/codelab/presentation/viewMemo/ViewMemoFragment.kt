@@ -53,9 +53,8 @@ class ViewMemoFragment : Fragment() {
     private fun updateUI(memo: Memo) = with(binding) {
         memoTitle.setText(memo.title)
         memoDescription.setText(memo.description)
-        memoTitle.isEnabled = false
-        memoDescription.isEnabled = false
-
+        memoLatitude.setText(memo.reminderLatitude.toString())
+        memoLongitude.setText(memo.reminderLongitude.toString())
     }
 
     override fun onDestroyView() {

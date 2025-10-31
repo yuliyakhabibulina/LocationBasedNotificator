@@ -52,7 +52,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeViewModel()
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
@@ -88,17 +87,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
+            moveCameraToDefaultLocation()
             enableMyLocationOnMap()
         } else {
             locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         }
-    }
-
-    private fun observeViewModel() {
-//    = with(viewModel) {
-//        collectFlow(navBackEvent) { shouldNavigateBack ->
-//
-//        }
     }
 
     @SuppressLint("MissingPermission")
@@ -125,6 +118,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         const val REQUEST_KEY_LOCATION = "location_request"
         const val BUNDLE_KEY_LOCATION = "selected_location"
         private val DEFAULT_LAT_LNG = LatLng(52.13, 21.08)
-        private const val DEFAULT_ZOOM_LEVEL = 5f
+        private const val DEFAULT_ZOOM_LEVEL = 15f
     }
 }

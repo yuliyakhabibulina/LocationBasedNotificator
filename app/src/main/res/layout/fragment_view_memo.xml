@@ -18,6 +18,7 @@
             android:id="@+id/memo_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:hint="@string/memo_title" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -36,7 +37,46 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="top"
+            android:enabled="false"
             android:hint="@string/memo_text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/memo_latitude_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/memo_description_container">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/memo_latitude"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="top"
+            android:enabled="false"
+            android:hint="@string/memo_latitude" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/memo_longitude_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/memo_latitude_container">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/memo_longitude"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="top"
+            android:enabled="false"
+            android:hint="@string/memo_longitude" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
