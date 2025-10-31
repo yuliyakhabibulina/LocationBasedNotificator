@@ -8,8 +8,6 @@ import com.sap.codelab.domain.usecases.SaveMemoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -35,13 +33,12 @@ internal class CreateMemoViewModel @Inject constructor(
             } else if (description.isEmpty()) {
                 _errorMessageId.send(R.string.memo_text_empty_error)
             } else {
-                val memo = Memo(
+                val memo = Memo (
                     title = title,
                     description = description,
                     id = 0,
-                    reminderDate = 0,
-                    reminderLatitude = 0F,
-                    reminderLongitude = 0F,
+                    reminderLatitude = 0.0,
+                    reminderLongitude = 0.0,
                     isDone = false
                 )
                 saveMemoUseCase.invoke(memo)
