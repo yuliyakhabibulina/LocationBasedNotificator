@@ -1,17 +1,18 @@
 package com.sap.codelab.domain.usecases
 
-import com.sap.codelab.domain.model.Memo
 import com.sap.codelab.domain.repository.GeofenceRepository
 import com.sap.codelab.domain.repository.MemoRepository
+import com.sap.codelab.presentation.mapper.fromUI
+import com.sap.codelab.presentation.model.MemoUI
 import javax.inject.Inject
 
 class SaveMemoUseCase @Inject constructor(
     private val memoRepository: MemoRepository,
     private val geofenceRepository: GeofenceRepository
 ) {
-    suspend operator fun invoke(memo: Memo) {
-        val memoId = memoRepository.saveMemo(memo)
-        val memoWithId = memo.copy(id = memoId)
+    suspend operator fun invoke(memo: MemoUI) {
+        val memoId = memoRepository.saveMemo(memo.fromUI())
+        val memoWithId = memo.fromUI().copy(id = memoId)
         geofenceRepository.addGeofence(memoWithId, GEOFENCE_RADIUS)
     }
 

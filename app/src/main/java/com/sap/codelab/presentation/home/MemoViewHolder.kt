@@ -2,7 +2,7 @@ package com.sap.codelab.presentation.home
 
 import androidx.recyclerview.widget.RecyclerView
 import com.sap.codelab.databinding.ItemMemoBinding
-import com.sap.codelab.domain.model.Memo
+import com.sap.codelab.presentation.model.MemoUI
 
 /**
  * View holder for Memos.
@@ -10,10 +10,10 @@ import com.sap.codelab.domain.model.Memo
 class MemoViewHolder(
     private val binding: ItemMemoBinding,
     private val onMemoClick: (Long) -> Unit,
-    private val onCheckedChange: (Memo, Boolean) -> Unit
+    private val onCheckedChange: (MemoUI, Boolean) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(memo: Memo) = with(binding) {
+    fun bind(memo: MemoUI) = with(binding) {
         memoTitle.text = memo.title
         memoText.text = memo.description
 

@@ -5,15 +5,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.sap.codelab.databinding.ItemMemoBinding
-import com.sap.codelab.domain.model.Memo
+import com.sap.codelab.presentation.model.MemoUI
 
 /**
  * Adapter containing a set of memos.
  */
 class MemoAdapter(
     private val onMemoClick: (Long) -> Unit,
-    private val onCheckedChange: (Memo, Boolean) -> Unit
-) : ListAdapter<Memo, MemoViewHolder>(MemoDiffCallback()) {
+    private val onCheckedChange: (MemoUI, Boolean) -> Unit
+) : ListAdapter<MemoUI, MemoViewHolder>(MemoDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemoViewHolder {
         val binding = ItemMemoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -25,12 +25,12 @@ class MemoAdapter(
     }
 }
 
-class MemoDiffCallback : DiffUtil.ItemCallback<Memo>() {
-    override fun areItemsTheSame(oldItem: Memo, newItem: Memo): Boolean {
+class MemoDiffCallback : DiffUtil.ItemCallback<MemoUI>() {
+    override fun areItemsTheSame(oldItem: MemoUI, newItem: MemoUI): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: Memo, newItem: Memo): Boolean {
+    override fun areContentsTheSame(oldItem: MemoUI, newItem: MemoUI): Boolean {
         return oldItem == newItem
     }
 }

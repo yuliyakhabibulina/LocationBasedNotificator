@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.sap.codelab.databinding.FragmentViewMemoBinding
 import com.sap.codelab.domain.model.Memo
+import com.sap.codelab.presentation.model.MemoUI
 import com.sap.codelab.utils.extensions.collectFlow
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.getValue
@@ -50,7 +51,7 @@ class ViewMemoFragment : Fragment() {
      *
      * @param memo - the memo whose details are to be displayed.
      */
-    private fun updateUI(memo: Memo) = with(binding) {
+    private fun updateUI(memo: MemoUI) = with(binding) {
         memoTitle.setText(memo.title)
         memoDescription.setText(memo.description)
         memoLatitude.setText(memo.reminderLatitude.toString())

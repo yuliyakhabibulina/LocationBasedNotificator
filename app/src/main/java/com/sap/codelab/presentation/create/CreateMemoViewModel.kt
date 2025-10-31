@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.sap.codelab.R
-import com.sap.codelab.domain.model.Memo
 import com.sap.codelab.domain.usecases.SaveMemoUseCase
+import com.sap.codelab.presentation.model.MemoUI
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -40,7 +40,7 @@ internal class CreateMemoViewModel @Inject constructor(
             } else if (description.isEmpty()) {
                 _errorMessageId.send(R.string.memo_text_empty_error)
             } else {
-                val memo = Memo(
+                val memo = MemoUI(
                     title = title,
                     description = description,
                     id = 0,

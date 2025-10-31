@@ -2,10 +2,10 @@ package com.sap.codelab.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sap.codelab.domain.model.Memo
 import com.sap.codelab.domain.usecases.GetAllMemoUseCase
 import com.sap.codelab.domain.usecases.GetOpenUseCase
 import com.sap.codelab.domain.usecases.SaveMemoUseCase
+import com.sap.codelab.presentation.model.MemoUI
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,8 +22,8 @@ internal class HomeViewModel @Inject constructor(
 
     private var isShowAll = false
 
-    private val _memos: MutableStateFlow<List<Memo>> = MutableStateFlow(listOf())
-    val memos: StateFlow<List<Memo>> = _memos
+    private val _memos: MutableStateFlow<List<MemoUI>> = MutableStateFlow(listOf())
+    val memos: StateFlow<List<MemoUI>> = _memos
 
     fun loadAllMemos() {
         isShowAll = true
@@ -47,7 +47,7 @@ internal class HomeViewModel @Inject constructor(
      * @param memo      - the memo to update.
      * @param isChecked - whether the memo has been checked (marked as done).
      */
-    fun updateMemo(memo: Memo, isChecked: Boolean) {
+    fun updateMemo(memo: MemoUI, isChecked: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
              if (isChecked) {
                 saveMemoUseCase.invoke(memo.copy(isDone = true))

@@ -1,14 +1,18 @@
 package com.sap.codelab.domain.usecases
 
-import com.sap.codelab.domain.model.Memo
 import com.sap.codelab.domain.repository.MemoRepository
+import com.sap.codelab.presentation.mapper.toUI
+import com.sap.codelab.presentation.model.MemoUI
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class GetAllMemoUseCase @Inject constructor(
     private val repository: MemoRepository
 ) {
-    operator fun invoke(): Flow<List<Memo>> {
-        return repository.getAll()
+    operator fun invoke(): Flow<List<MemoUI>> {
+        return repository.getAll().map { memoEntity ->
+            memoEntity.map { it.toUI() }
+        }
     }
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sap.codelab.domain.model.Memo
 import com.sap.codelab.domain.usecases.GetMemoByIdUseCase
+import com.sap.codelab.presentation.model.MemoUI
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,8 +20,8 @@ internal class ViewMemoViewModel @Inject constructor(
         private val getMemoByIdUseCase: GetMemoByIdUseCase
 ) : ViewModel() {
 
-    private val _memo: MutableStateFlow<Memo?> = MutableStateFlow(null)
-    val memo: StateFlow<Memo?> = _memo
+    private val _memo: MutableStateFlow<MemoUI?> = MutableStateFlow(null)
+    val memo: StateFlow<MemoUI?> = _memo
 
     /**
      * Loads the memo whose id matches the given memoId from the database.
