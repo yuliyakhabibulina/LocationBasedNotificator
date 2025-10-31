@@ -15,13 +15,15 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
+    const val DATABASE_NAME = "memo_database"
+
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext appContext: Context): MemoDatabase {
         return Room.databaseBuilder(
             appContext,
             MemoDatabase::class.java,
-            "memo_database"
+            DATABASE_NAME
         ).build()
     }
 
@@ -29,4 +31,5 @@ object DatabaseModule {
     fun provideMemoDao(database: MemoDatabase): MemoDao {
         return database.getMemoDao()
     }
+
 }
