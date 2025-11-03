@@ -129,9 +129,9 @@ class HomeFragment : Fragment() {
         )
     }
 
-    private fun switchMenu(flag: Boolean) {
-        menuItemShowAll.isVisible = !flag
-        menuItemShowOpen.isVisible = flag
+    private fun switchMenu(isVisible: Boolean) {
+        menuItemShowAll.isVisible = !isVisible
+        menuItemShowOpen.isVisible = isVisible
     }
 
 }
