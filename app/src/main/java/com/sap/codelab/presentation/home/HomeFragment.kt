@@ -91,18 +91,12 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
-    /**
-     * Observe viewModel
-     */
     private fun observeViewmodel() = with(viewModel){
         collectFlow(memos) { memos ->
             memoAdapter.submitList(memos)
         }
     }
 
-    /**
-     * Initializes the recycler view to display the list of memos.
-     */
     private fun setupRecyclerView() {
         binding.recyclerView.apply {
             adapter = memoAdapter
