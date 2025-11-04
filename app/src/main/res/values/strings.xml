@@ -27,5 +27,6 @@
     <string name="permission_dialog_settings_message">You previously denied the permission request. To use this feature, you must manually enable it in the app settings.</string>
     <string name="permission_dialog_settings_positive_button">Settings</string>
     <string name="permission_dialog_settings_negative_button">Cancel</string>
+    <string name="permission_dialog_rationale_message_notification">To receive timely alerts when you are approaching a memo, the app requires permission to send notifications. Please grant this permission.</string>
 
 </resources>

@@ -1,12 +1,22 @@
 package com.sap.codelab.presentation.home
 
+import android.Manifest
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -31,6 +41,18 @@ class HomeFragment : Fragment() {
 
     private lateinit var menuItemShowAll: MenuItem
     private lateinit var menuItemShowOpen: MenuItem
+
+    private val permissionsLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+            if (!isNotificationPermissionGranted(requireContext())) {
+                showNotificationPermissionDialog()
+            }
+        }
+
+    private val requiredPermissions =
+        arrayOf(
+            Manifest.permission.POST_NOTIFICATIONS
+        )
 
     private val memoAdapter: MemoAdapter by lazy {
         MemoAdapter(
@@ -61,6 +83,7 @@ class HomeFragment : Fragment() {
         setupRecyclerView()
         observeViewmodel()
         setupFab()
+        permissionsLauncher.launch(requiredPermissions)
     }
 
     override fun onDestroyView() {
@@ -134,4 +157,29 @@ class HomeFragment : Fragment() {
         menuItemShowOpen.isVisible = isVisible
     }
 
+
+    private fun showNotificationPermissionDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.permission_dialog_rationale_title)
+            .setMessage(R.string.permission_dialog_rationale_message_notification)
+            .setPositiveButton(R.string.permission_dialog_settings_positive_button)  { _, _ ->
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri = Uri.fromParts("package", requireActivity().packageName, null)
+                intent.data = uri
+                startActivity(intent)
+            }
+            .setNegativeButton(R.string.permission_dialog_rationale_negative_button, null)
+            .show()
+    }
+
+    fun isNotificationPermissionGranted(context: Context): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            true
+        }
+    }
 }

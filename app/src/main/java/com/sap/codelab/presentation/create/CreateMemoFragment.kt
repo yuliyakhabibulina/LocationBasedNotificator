@@ -1,6 +1,5 @@
 package com.sap.codelab.presentation.create
 
-import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -46,17 +45,13 @@ class CreateMemoFragment : Fragment() {
             }
         }
 
-    private val requiredPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    private val requiredPermissions =
         arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
         )
-    } else {
-        arrayOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        )
-    }
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
