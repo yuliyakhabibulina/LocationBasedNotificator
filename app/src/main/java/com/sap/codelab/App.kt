@@ -3,12 +3,5 @@ package com.sap.codelab
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 
-/**
- * Extension of the Android Application class.
- */
 @HiltAndroidApp
-internal class App : Application() {
-    override fun onCreate() {
-        super.onCreate()
-    }
-}
+internal class App : Application()

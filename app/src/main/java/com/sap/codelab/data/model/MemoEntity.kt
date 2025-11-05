@@ -21,5 +21,7 @@ data class MemoEntity(
     @ColumnInfo(name = "reminderLongitude")
     var reminderLongitude: Double,
     @ColumnInfo(name = "isDone")
-    var isDone: Boolean = false
+    var isDone: Boolean = false,
+    @ColumnInfo(name = "isGeofenceActive")
+    var isGeofenceActive: Boolean = false
 )

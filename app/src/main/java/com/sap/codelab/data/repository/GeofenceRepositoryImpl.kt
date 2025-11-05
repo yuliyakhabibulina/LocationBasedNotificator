@@ -10,6 +10,7 @@ import com.google.android.gms.location.GeofencingRequest
 import com.google.android.gms.location.LocationServices
 import com.sap.codelab.data.database.MemoDao
 import com.sap.codelab.data.mapper.fromEntity
+import com.sap.codelab.data.model.GeofenceLimitExceededException
 import com.sap.codelab.domain.model.Memo
 import com.sap.codelab.domain.repository.GeofenceRepository
 import com.sap.codelab.presentation.notification.LocationBroadcastReceiver
@@ -55,6 +56,20 @@ class GeofenceRepositoryImpl @Inject constructor(
 
     @SuppressLint("MissingPermission")
     override suspend fun addGeofence(memo: Memo, radius: Float): Result<Unit> = runCatching {
+        val activeGeofenceCount = memoDao.getActiveGeofenceCount()
+        if (activeGeofenceCount >= GEOFENCE_LIMIT) {
+            val oldestMemoId = memoDao.getOldestActiveGeofenceMemoId()
+            if (oldestMemoId != null) {
+                Log.i(
+                    TAG,
+                    "Geofence limit reached. Removing oldest geofence with memo ID: $oldestMemoId"
+                )
+                removeGeofence(oldestMemoId)
+            } else {
+                throw GeofenceLimitExceededException("Limit reached, but no oldest geofence found to remove.")
+            }
+        }
+
         val geofence = Geofence.Builder()
             .setRequestId(memo.id.toString())
             .setCircularRegion(
@@ -72,20 +87,27 @@ class GeofenceRepositoryImpl @Inject constructor(
             .build()
 
         geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent).await()
-        Unit
+        memoDao.setGeofenceActive(memo.id, true)
+
     }.onFailure { exception ->
-        Log.e(TAG, "Failed to add geofence for memo ID: ${memo.id}. Error: ${exception.message}", exception)
+        Log.e(TAG, "Failed to process geofence. Error: ${exception.message}", exception)
     }
 
     override suspend fun removeGeofence(memoId: Long): Result<Unit> = runCatching {
         geofencingClient.removeGeofences(listOf(memoId.toString())).await()
-        Unit
+        memoDao.setGeofenceActive(memoId, false)
+
     }.onFailure { exception ->
-        Log.e(TAG, "Failed to remove geofence for memo ID: $memoId. Error: ${exception.message}", exception)
+        Log.e(
+            TAG,
+            "Failed to remove geofence for memo ID: $memoId. Error: ${exception.message}",
+            exception
+        )
     }
 
     companion object {
         private const val TAG = "GeofenceRepository"
         private const val GEOFENCE_INTENT_REQUEST_CODE = 0
+        private const val GEOFENCE_LIMIT = 100
     }
 }

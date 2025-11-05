@@ -36,4 +36,22 @@ interface MemoDao {
      */
     @Query("SELECT * FROM memo WHERE id = :memoId")
     fun getMemoById(memoId: Long): MemoEntity?
+
+    /**
+     * @return the number of memos with geofence active.
+     */
+    @Query("SELECT COUNT(id) FROM memo WHERE isGeofenceActive = 1")
+    suspend fun getActiveGeofenceCount(): Int
+
+    /**
+     * @set the geofence active.
+     */
+    @Query("UPDATE memo SET isGeofenceActive = :isActive WHERE id = :memoId")
+    suspend fun setGeofenceActive(memoId: Long, isActive: Boolean)
+
+    /**
+     * @return id of memo with the oldest geofence active.
+     */
+    @Query("SELECT id FROM memo WHERE isGeofenceActive = 1 ORDER BY id ASC LIMIT 1")
+    suspend fun getOldestActiveGeofenceMemoId(): Long?
 }
