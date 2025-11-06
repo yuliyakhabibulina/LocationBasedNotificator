@@ -39,8 +39,10 @@ min SDK: Android API level 26
 - Flow
 
 # Testing:
-- Espresso
+- Robolectric
+- Mockito
 - JUnit
+- Turbine
 
 # Other
 - Google Play Services Location (Geofencing) & Maps SDK
