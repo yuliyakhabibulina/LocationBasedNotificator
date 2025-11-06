@@ -1,30 +1,50 @@
-# android-codelab
-Android project that serves as a base for code challenges implemented by applicants.
-The base is written in kotlin. 
+# Location Based Notificator
+A mobile application that allows users to create location-based memos and reminders which trigger automatically when the user reaches a specified location.
 
-(!)If you have the NDK plugin installed, please disable it for the project, as errors may occur.
+# Features
 
-# Android Coding Challenges
-Coding challenges are useful when the applicant does not provide a github repository or any work samples. Even if a github repository has been provided it is generally a good idea to give the applicant a task to solve and have him present his solution in a separate session. 
+Create Memos with Location:
+Users can create a new memo by selecting a specific point on a map (Google Maps or OpenStreetMap).
 
-## General Instructions
-The following instructions/conditions are valid independently of the actual coding challenge
+# Smart Notifications:
+When the user comes within 200 meters of the saved location, the app displays a notification in the phone’s status bar.
 
-- The code base has been tested with Android Studio Narwhal Feature Drop which is the recommended version, however feel free to try a higher version and adjust the configuration as needed
-- The task should be implemented in kotlin
-- Approach this task as if it was a real-world implementation - i.e. exactly how you would approach the task if you were working for a company
-- 3rd party libraries may be used
-- The base project for this task will be provided by us
-- Once completed, please send us your solution and presents it to us, followed by a discussion about the implementation and design decisions made
-- The solution can be sent as a zip file or as a publicly accessible github/gitlub etc project link
-- The solution sent to us must be complete, i.e. can be opened directly via Android Studio without additional configuration
+# Persistent Functionality:
+The location tracking and notifications continue to work:
+When the app is running in the background, or
+Even when the app is not running at all
 
-## Location Based Notifications
-In this challenge the applicant has to implement location-based notifications/reminders, the following conditions are given:
+# How It Works
 
-- When creating a new memo, the user provides a location by selecting a point on a map (for instance: google maps or open street maps)
-- The memo is then saved
-- Once the user physically reaches that location, a notification should be displayed in the phone's status bar, that contains the title and the first 140 characters of the note text
-- "Reaching the location" is defined as follows: The user is within 200 meters of the location he initially selected during the memo creation
-- The notification should also contain an icon (the icon choice is up to you)
-- The feature must also work, when the app is running in the background (or possibly not running at all)
+User creates a new memo and selects a location on the map.
+The memo (title, content, and coordinates) is saved.
+The app monitors the user’s location.
+Once the user enters a 200m radius of the saved location, a notification is show
+
+# Build & Run environment:
+Android Studio Narwhal 3 Feature Drop | 2025.1.3
+Gradle version: 8.12.2
+Kotlin version: 2.2.10
+JDK version: java 21.0.7 2025-04-15 LTS
+target SDK: Android API level 36
+min SDK: Android API level 26
+
+# Tech stack:
+- Kotlin
+- Coroutines
+- Jetpack Navigation Component
+- Hilt
+- Kotlinx serialization
+- Room 
+- Flow
+
+# Testing:
+- Espresso
+- JUnit
+
+# Other
+- Google Play Services Location (Geofencing) & Maps SDK
+
+# Architecture:
+- Clean Architecture
+- MVVM
