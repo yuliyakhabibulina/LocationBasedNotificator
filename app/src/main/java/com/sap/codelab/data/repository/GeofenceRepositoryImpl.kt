@@ -1,10 +1,13 @@
 package com.sap.codelab.data.repository
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.util.Log
+import androidx.core.content.ContextCompat
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingRequest
 import com.google.android.gms.location.LocationServices
@@ -56,7 +59,24 @@ class GeofenceRepositoryImpl @Inject constructor(
 
     @SuppressLint("MissingPermission")
     override suspend fun addGeofence(memo: Memo, radius: Float): Result<Unit> = runCatching {
+        if (ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Log.w("GeofenceHelper", "Fine location permission not granted.")
+        }
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q &&
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Log.w("GeofenceHelper", "Background location permission not granted.")
+        }
+
         val activeGeofenceCount = memoDao.getActiveGeofenceCount()
+
         if (activeGeofenceCount >= GEOFENCE_LIMIT) {
             val oldestMemoId = memoDao.getOldestActiveGeofenceMemoId()
             if (oldestMemoId != null) {

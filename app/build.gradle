@@ -30,6 +30,10 @@ android {
         manifestPlaceholders = [ MAPS_API_KEY:"${getApiKey()}" ]
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
+    sourceSets {
+        main.java.srcDirs = ['src/main/java']
+        test.java.srcDirs = ['src/test/java']
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -100,4 +104,14 @@ dependencies {
     // Google Maps
     implementation "com.google.android.gms:play-services-maps:$googleMapsVersion"
     implementation "com.google.android.gms:play-services-location:$googleLocationVersion"
+
+    //Tests
+    testImplementation 'app.cash.turbine:turbine:1.1.0'
+    testImplementation 'org.mockito.kotlin:mockito-kotlin:5.4.0'
+    testImplementation 'org.mockito:mockito-inline:5.2.0'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0'
+    testImplementation 'org.robolectric:robolectric:4.13'
+    testImplementation 'androidx.arch.core:core-testing:2.2.0'
+    testImplementation 'junit:junit:4.13.2'
+
 }
