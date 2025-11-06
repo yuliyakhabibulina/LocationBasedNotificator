@@ -21,9 +21,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:contentDescription="@string/button_get_location"
         android:importantForAccessibility="no"
-        app:srcCompat="@drawable/ic_map_marker"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_map_marker" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,7 +4,7 @@ import com.sap.codelab.data.model.MemoEntity
 import com.sap.codelab.domain.model.Memo
 
 /**
- * @map form entity to domain model
+ * @maps form entity to domain model
  */
 fun MemoEntity.fromEntity(): Memo {
     return Memo(
@@ -18,7 +18,7 @@ fun MemoEntity.fromEntity(): Memo {
 }
 
 /**
- * @map to entity from domain model
+ * @maps to entity from domain model
  */
 fun Memo.toEntity(): MemoEntity {
     return MemoEntity(

@@ -182,10 +182,10 @@ class CreateMemoFragment : Fragment() {
         AlertDialog.Builder(requireContext())
             .setTitle(R.string.permission_dialog_rationale_title)
             .setMessage(R.string.permission_dialog_rationale_message)
-            .setPositiveButton(R.string.permission_dialog_rationale_positive_button) { _, _ ->
+            .setPositiveButton(R.string.button_ok) { _, _ ->
                 permissionsLauncher.launch(requiredPermissions)
             }
-            .setNegativeButton(R.string.permission_dialog_rationale_negative_button, null)
+            .setNegativeButton(R.string.button_cancel, null)
             .show()
     }
 
@@ -196,13 +196,13 @@ class CreateMemoFragment : Fragment() {
         AlertDialog.Builder(requireContext())
             .setTitle(R.string.permission_dialog_settings_title)
             .setMessage(R.string.permission_dialog_settings_message)
-            .setPositiveButton(R.string.permission_dialog_settings_positive_button) { _, _ ->
+            .setPositiveButton(R.string.button_settings) { _, _ ->
                 val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                 val uri = Uri.fromParts("package", requireActivity().packageName, null)
                 intent.data = uri
                 startActivity(intent)
             }
-            .setNegativeButton(R.string.permission_dialog_settings_negative_button, null)
+            .setNegativeButton(R.string.button_cancel, null)
             .show()
     }
 
