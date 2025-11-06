@@ -16,11 +16,9 @@ class MemoViewHolder(
     fun bind(memo: MemoUI) = with(binding) {
         memoTitle.text = memo.title
         memoText.text = memo.description
-
         root.setOnClickListener {
             onMemoClick(memo.id)
         }
-
         checkBox.setOnCheckedChangeListener(null)
         checkBox.isChecked = memo.isDone
         checkBox.isEnabled = !memo.isDone

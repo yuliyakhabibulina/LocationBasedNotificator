@@ -15,16 +15,25 @@ class MemoAdapter(
     private val onCheckedChange: (MemoUI, Boolean) -> Unit
 ) : ListAdapter<MemoUI, MemoViewHolder>(MemoDiffCallback()) {
 
+    /**
+     * Creates a new MemoViewHolder.
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemoViewHolder {
         val binding = ItemMemoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MemoViewHolder(binding, onMemoClick, onCheckedChange)
     }
 
+    /**
+     * Binds the MemoViewHolder with the item at the given position.
+     */
     override fun onBindViewHolder(holder: MemoViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 }
 
+/**
+ * DiffUtil.ItemCallback implementation for MemoUI objects.
+ */
 class MemoDiffCallback : DiffUtil.ItemCallback<MemoUI>() {
     override fun areItemsTheSame(oldItem: MemoUI, newItem: MemoUI): Boolean {
         return oldItem.id == newItem.id

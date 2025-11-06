@@ -13,6 +13,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+/**
+ * Receiver for location events.
+ */
 @AndroidEntryPoint
 class LocationBroadcastReceiver(
 ) : BroadcastReceiver() {
@@ -23,7 +26,7 @@ class LocationBroadcastReceiver(
     override fun onReceive(context: Context, intent: Intent) {
         val event = GeofencingEvent.fromIntent(intent)
         if (event == null || event.hasError()) {
-            Log.e("GeofenceReceiver", "Invalid geofence event")
+            Log.e(TAG, "Invalid geofence event")
             return
         }
 
@@ -36,4 +39,9 @@ class LocationBroadcastReceiver(
             }
         }
     }
+
+    private companion object {
+        const val TAG = "LocationBroadcastReceiver"
+    }
+
 }

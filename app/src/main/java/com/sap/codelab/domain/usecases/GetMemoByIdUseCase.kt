@@ -5,6 +5,9 @@ import com.sap.codelab.presentation.mapper.toUI
 import com.sap.codelab.presentation.model.MemoUI
 import javax.inject.Inject
 
+/**
+ * UseCase to retrieve a memo by its id from the database.
+ */
 class GetMemoByIdUseCase @Inject constructor(
     private val repository: MemoRepository
 ) {

@@ -15,6 +15,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
@@ -31,6 +32,9 @@ import com.sap.codelab.utils.extensions.collectFlow
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.getValue
 
+/**
+ * The fragment for showing a list of memos. Also it provides checking notification permissions.
+ */
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
@@ -42,18 +46,25 @@ class HomeFragment : Fragment() {
     private lateinit var menuItemShowAll: MenuItem
     private lateinit var menuItemShowOpen: MenuItem
 
+    /**
+     *checks permissions and handle result.
+     */
     private val permissionsLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (!isNotificationPermissionGranted(requireContext())) {
                 showNotificationPermissionDialog()
             }
         }
 
-    private val requiredPermissions =
-        arrayOf(
-            Manifest.permission.POST_NOTIFICATIONS
-        )
+    /**
+     *required permission.
+     */
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private val requiredPermissions =  Manifest.permission.POST_NOTIFICATIONS
 
+    /**
+     * adapter for memo list.
+     */
     private val memoAdapter: MemoAdapter by lazy {
         MemoAdapter(
             onMemoClick = { item ->
@@ -76,13 +87,13 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.loadOpenMemos()
         setupMenu()
-        setupRecyclerView()
+        setupView()
         observeViewmodel()
-        setupFab()
         permissionsLauncher.launch(requiredPermissions)
     }
 
@@ -97,20 +108,23 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setupRecyclerView() {
-        binding.recyclerView.apply {
+    /**
+     *sets up recycler view and fab button.
+     */
+    private fun setupView() = with(binding) {
+        recyclerView.apply {
             adapter = memoAdapter
             layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
         }
-    }
-
-    private fun setupFab() {
-        binding.fab.setOnClickListener {
+        fab.setOnClickListener {
             it.findNavController().navigate(R.id.action_homeFragment_to_createMemoFragment)
         }
     }
 
+    /**
+     *sets up menu for fragment.
+     */
     private fun setupMenu() {
         requireActivity().addMenuProvider(
             object : MenuProvider {
@@ -146,12 +160,17 @@ class HomeFragment : Fragment() {
         )
     }
 
+    /**
+     *switches menu items visibility.
+     */
     private fun switchMenu(isVisible: Boolean) {
         menuItemShowAll.isVisible = !isVisible
         menuItemShowOpen.isVisible = isVisible
     }
 
-
+    /**
+     *shows dialog for notification permission.
+     */
     private fun showNotificationPermissionDialog() {
         AlertDialog.Builder(requireContext())
             .setTitle(R.string.permission_dialog_rationale_title)
@@ -166,6 +185,9 @@ class HomeFragment : Fragment() {
             .show()
     }
 
+    /**
+     *checks notification permission.
+     */
     fun isNotificationPermissionGranted(context: Context): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             ContextCompat.checkSelfPermission(

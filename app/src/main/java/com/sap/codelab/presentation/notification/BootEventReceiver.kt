@@ -15,6 +15,11 @@ import com.sap.codelab.domain.usecases.SaveMemoUseCase
 import com.sap.codelab.presentation.mapper.fromUI
 import kotlinx.coroutines.Dispatchers
 
+/**
+ * Receiver for boot event.
+ *
+ * The application must re-register geofenceы because the system deletes all registered geofences after a reboot.
+ */
 @AndroidEntryPoint
 class BootEventReceiver : BroadcastReceiver() {
 
@@ -43,10 +48,14 @@ class BootEventReceiver : BroadcastReceiver() {
                     )
                 }
             } catch (e: Exception) {
-                Log.e("BootEventReceiver", "An error occurred in Boot Event receiver.", e)
+                Log.e(TAG, "An error occurred in Boot Event receiver.", e)
             } finally {
                 pendingResult.finish()
             }
         }
+    }
+
+    private companion object {
+        const val TAG = "BootEventReceiver"
     }
 }

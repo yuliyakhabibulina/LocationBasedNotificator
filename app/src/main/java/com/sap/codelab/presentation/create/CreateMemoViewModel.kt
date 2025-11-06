@@ -32,6 +32,9 @@ internal class CreateMemoViewModel @Inject constructor(
 
     private val _locationState = MutableStateFlow(LatLng(0.0, 0.0))
 
+    /**
+     * Handles the save menu click and adds a new memo to the database.
+     */
     fun onSaveMenuClicked(title: String, description: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val errorMessage = when {
@@ -59,6 +62,9 @@ internal class CreateMemoViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Handles the location selection.
+     */
     fun onLocationSelected(lng: LatLng) {
         _locationState.update { LatLng(lng.latitude, lng.longitude) }
     }

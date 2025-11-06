@@ -2,6 +2,9 @@ package com.sap.codelab.domain.repository
 
 import com.sap.codelab.domain.model.Memo
 
+/**
+ * Interface for a repository offering geofence related operations.
+ */
 interface GeofenceRepository {
     suspend fun handleGeofenceTransition(geofenceIds: List<String>)
     suspend fun addGeofence(memo: Memo, radius: Float) : Result<Unit>

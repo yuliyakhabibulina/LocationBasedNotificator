@@ -7,6 +7,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
+/**
+ * UseCase to retrieve all memos from the database.
+ */
 class GetAllMemoUseCase @Inject constructor(
     private val repository: MemoRepository
 ) {

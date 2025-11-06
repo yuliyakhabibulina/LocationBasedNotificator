@@ -24,6 +24,9 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MarkerOptions
 import com.sap.codelab.R
 
+/**
+ * The fragment for showing a map. Also it provides checking location permissions.
+ */
 @AndroidEntryPoint
 class MapFragment : Fragment(), OnMapReadyCallback {
 
@@ -33,6 +36,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
     private var selectedLocation: LatLng? = null
 
+    /**
+     * checks permissions and handle result.
+     */
     private val locationPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
@@ -54,13 +60,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-
-        binding.fabConfirmLocation.setOnClickListener {
-            selectedLocation?.let { location ->
-                setFragmentResult(REQUEST_KEY_LOCATION, bundleOf(BUNDLE_KEY_LOCATION to location))
-                findNavController().popBackStack()
-            }
-        }
+        setupListeners()
     }
 
     override fun onDestroyView() {
@@ -71,7 +71,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         map.uiSettings.isZoomControlsEnabled = false
-
         map.setOnMapClickListener { latLng ->
             map.clear()
             selectedLocation = latLng
@@ -81,6 +80,21 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         checkPermissionAndSetupMap()
     }
 
+    /**
+     * sets up listeners for the confirm location button.
+     */
+    private fun setupListeners(){
+        binding.fabConfirmLocation.setOnClickListener {
+            selectedLocation?.let { location ->
+                setFragmentResult(REQUEST_KEY_LOCATION, bundleOf(BUNDLE_KEY_LOCATION to location))
+                findNavController().popBackStack()
+            }
+        }
+    }
+
+    /**
+     * checks location permission and setup map.
+     */
     private fun checkPermissionAndSetupMap() {
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
@@ -94,6 +108,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    /**
+     * enables my location on map. If location is not available, it moves to default location.
+     */
     @SuppressLint("MissingPermission")
     private fun enableMyLocationOnMap() {
         map.isMyLocationEnabled = true
@@ -110,6 +127,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    /**
+     *moves camera to default location.
+     */
     private fun moveCameraToDefaultLocation() {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LAT_LNG, DEFAULT_ZOOM_LEVEL))
     }

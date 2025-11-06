@@ -13,6 +13,9 @@ import com.sap.codelab.utils.extensions.collectFlow
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.getValue
 
+/**
+ * The fragment for viewing a memo details.
+ */
 @AndroidEntryPoint
 class ViewMemoFragment : Fragment() {
 
@@ -37,6 +40,14 @@ class ViewMemoFragment : Fragment() {
         observeViewModel()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    /**
+     * Observes the memo flow from the ViewModel and updates the UI accordingly.
+     */
     private fun observeViewModel() = with(viewModel){
         collectFlow(memo) { value ->
             value?.let { memo ->
@@ -57,8 +68,4 @@ class ViewMemoFragment : Fragment() {
         memoLongitude.setText(memo.reminderLongitude.toString())
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 }

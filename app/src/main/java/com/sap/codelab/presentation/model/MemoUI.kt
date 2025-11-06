@@ -1,5 +1,8 @@
 package com.sap.codelab.presentation.model
 
+/**
+ * Data class representing a memo UI object.
+ */
 data class MemoUI(
     val id : Long = 0,
     val title: String = "",

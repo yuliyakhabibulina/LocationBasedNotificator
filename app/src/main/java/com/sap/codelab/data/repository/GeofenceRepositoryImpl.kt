@@ -25,6 +25,9 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * The repository provides all operations for adding and deleting geofence
+ */
 @Singleton
 class GeofenceRepositoryImpl @Inject constructor(
     private val memoDao: MemoDao,
@@ -34,16 +37,22 @@ class GeofenceRepositoryImpl @Inject constructor(
 
     private val geofencingClient by lazy { LocationServices.getGeofencingClient(context) }
 
+    /**
+     * Pending intent for geofence transitions.
+     */
     private val geofencePendingIntent: PendingIntent by lazy {
         val intent = Intent(context, LocationBroadcastReceiver::class.java)
         PendingIntent.getBroadcast(
             context,
-            GEOFENCE_INTENT_REQUEST_CODE,
+            GEOFENCE_REQUEST_CODE,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
         )
     }
 
+    /**
+     *handles geofence transitions.
+     */
     override suspend fun handleGeofenceTransition(geofenceIds: List<String>) = withContext(
         Dispatchers.IO
     ) {
@@ -57,6 +66,9 @@ class GeofenceRepositoryImpl @Inject constructor(
         }
     }
 
+    /**
+     * Adds a geofence for the given memo.
+     */
     @SuppressLint("MissingPermission")
     override suspend fun addGeofence(memo: Memo, radius: Float): Result<Unit> = runCatching {
         if (ContextCompat.checkSelfPermission(
@@ -64,7 +76,7 @@ class GeofenceRepositoryImpl @Inject constructor(
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            Log.w("GeofenceHelper", "Fine location permission not granted.")
+            Log.w(TAG, "Fine location permission was not granted.")
         }
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q &&
             ContextCompat.checkSelfPermission(
@@ -72,18 +84,13 @@ class GeofenceRepositoryImpl @Inject constructor(
                 Manifest.permission.ACCESS_BACKGROUND_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            Log.w("GeofenceHelper", "Background location permission not granted.")
+            Log.w(TAG, "Background location permission was not granted.")
         }
 
         val activeGeofenceCount = memoDao.getActiveGeofenceCount()
-
         if (activeGeofenceCount >= GEOFENCE_LIMIT) {
             val oldestMemoId = memoDao.getOldestActiveGeofenceMemoId()
             if (oldestMemoId != null) {
-                Log.i(
-                    TAG,
-                    "Geofence limit reached. Removing oldest geofence with memo ID: $oldestMemoId"
-                )
                 removeGeofence(oldestMemoId)
             } else {
                 throw GeofenceLimitExceededException("Limit reached, but no oldest geofence found to remove.")
@@ -110,24 +117,23 @@ class GeofenceRepositoryImpl @Inject constructor(
         memoDao.setGeofenceActive(memo.id, true)
 
     }.onFailure { exception ->
-        Log.e(TAG, "Failed to process geofence. Error: ${exception.message}", exception)
+        Log.e(TAG, "Geofence processing failed. Error: ${exception.message}", exception)
     }
 
     override suspend fun removeGeofence(memoId: Long): Result<Unit> = runCatching {
         geofencingClient.removeGeofences(listOf(memoId.toString())).await()
         memoDao.setGeofenceActive(memoId, false)
-
     }.onFailure { exception ->
         Log.e(
             TAG,
-            "Failed to remove geofence for memo ID: $memoId. Error: ${exception.message}",
+            "Error removing geofence for memo id: $memoId. Error: ${exception.message}",
             exception
         )
     }
 
     companion object {
         private const val TAG = "GeofenceRepository"
-        private const val GEOFENCE_INTENT_REQUEST_CODE = 0
+        private const val GEOFENCE_REQUEST_CODE = 0
         private const val GEOFENCE_LIMIT = 100
     }
 }

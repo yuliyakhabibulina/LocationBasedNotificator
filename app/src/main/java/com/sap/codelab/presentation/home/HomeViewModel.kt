@@ -25,6 +25,9 @@ internal class HomeViewModel @Inject constructor(
     private val _memos: MutableStateFlow<List<MemoUI>> = MutableStateFlow(listOf())
     val memos: StateFlow<List<MemoUI>> = _memos
 
+    /**
+     * Loads all memos from the database.
+     */
     fun loadAllMemos() {
         isShowAll = true
         viewModelScope.launch(Dispatchers.IO) {
@@ -33,6 +36,9 @@ internal class HomeViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Loads the open memos from the database.
+     */
     fun loadOpenMemos() {
         isShowAll = false
         viewModelScope.launch(Dispatchers.IO) {

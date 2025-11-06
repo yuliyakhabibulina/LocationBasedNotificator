@@ -23,6 +23,9 @@ import androidx.fragment.app.setFragmentResultListener
 import com.google.android.gms.maps.model.LatLng
 import com.sap.codelab.presentation.map.MapFragment
 
+/**
+ * The fragment for creating a new memo. Also it provides checking location permissions.
+ */
 @AndroidEntryPoint
 class CreateMemoFragment : Fragment() {
 
@@ -31,6 +34,9 @@ class CreateMemoFragment : Fragment() {
 
     private val viewModel: CreateMemoViewModel by viewModels()
 
+    /**
+     *checks permissions and handle result.
+     */
     private val permissionsLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             val allGranted = permissions.entries.all { it.value }
@@ -40,17 +46,23 @@ class CreateMemoFragment : Fragment() {
                 if (shouldShowSettingsDialog()) {
                     showSettingsDialog()
                 } else {
-                    Toast.makeText(requireContext(), getString(R.string.permissions_not_granted), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.permissions_not_granted),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
 
+    /**
+     *array of required permissions.
+     */
     private val requiredPermissions =
         arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
         )
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,7 +84,10 @@ class CreateMemoFragment : Fragment() {
         _binding = null
     }
 
-    private fun setupListeners() = with(binding){
+    /**
+     * Sets up listeners for the get location button and the map fragment result listener.
+     */
+    private fun setupListeners() = with(binding) {
         buttonGetLocation.setOnClickListener {
             handlePermissionsRequest()
         }
@@ -83,6 +98,9 @@ class CreateMemoFragment : Fragment() {
         }
     }
 
+    /**
+     * observes flow from view model and handle events.
+     */
     private fun observeViewModel() = with(viewModel) {
         collectFlow(navBackEvent) { shouldNavigateBack ->
             if (shouldNavigateBack) {
@@ -98,6 +116,9 @@ class CreateMemoFragment : Fragment() {
         }
     }
 
+    /**
+     * Sets up the menu for the fragment.
+     */
     private fun setupMenu() {
         requireActivity().addMenuProvider(
             object : MenuProvider {
@@ -126,6 +147,10 @@ class CreateMemoFragment : Fragment() {
             Lifecycle.State.RESUMED
         )
     }
+
+    /**
+     * Handles the permissions request. Show permission request dialog if needed.
+     */
     private fun handlePermissionsRequest() {
         if (shouldShowRationaleDialog()) {
             showRationaleDialog()
@@ -134,16 +159,25 @@ class CreateMemoFragment : Fragment() {
         }
     }
 
+    /**
+     * Checks if we should show a rationale dialog.
+     */
     private fun shouldShowRationaleDialog(): Boolean {
-         return requiredPermissions.any {
+        return requiredPermissions.any {
             ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), it)
         }
     }
 
+    /**
+     * Checks if we should show a setting dialog.
+     */
     private fun shouldShowSettingsDialog(): Boolean {
-          return !shouldShowRationaleDialog()
+        return !shouldShowRationaleDialog()
     }
 
+    /**
+     * Shows a dialog for requesting permissions.
+     */
     private fun showRationaleDialog() {
         AlertDialog.Builder(requireContext())
             .setTitle(R.string.permission_dialog_rationale_title)
@@ -155,6 +189,9 @@ class CreateMemoFragment : Fragment() {
             .show()
     }
 
+    /**
+     * Shows a dialog that leads to the app settings.
+     */
     private fun showSettingsDialog() {
         AlertDialog.Builder(requireContext())
             .setTitle(R.string.permission_dialog_settings_title)
@@ -169,6 +206,9 @@ class CreateMemoFragment : Fragment() {
             .show()
     }
 
+    /**
+     * Provides navigation to the map fragment.
+     */
     private fun navigateToMapFragment() {
         findNavController().navigate(R.id.action_createMemoFragment_to_mapFragment)
     }

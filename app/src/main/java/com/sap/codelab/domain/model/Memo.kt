@@ -1,5 +1,8 @@
 package com.sap.codelab.domain.model
 
+/**
+ * domain memo model
+ */
 data class Memo(
     val id: Long = 0,
     val title: String,

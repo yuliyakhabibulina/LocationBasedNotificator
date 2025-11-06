@@ -11,6 +11,9 @@ import javax.inject.Singleton
 import com.sap.codelab.data.database.MemoDatabase
 import dagger.hilt.components.SingletonComponent
 
+/**
+ * @use Hilt for dependency injection
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {

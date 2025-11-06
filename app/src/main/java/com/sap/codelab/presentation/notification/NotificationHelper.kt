@@ -15,12 +15,18 @@ import com.sap.codelab.domain.model.Memo
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
+/**
+ * Helper class for showing notifications.
+ */
 class NotificationHelper @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
 
     private val notificationManager = NotificationManagerCompat.from(context)
 
+    /**
+     * Creates a notification channel.
+     */
     fun createNotificationChannel() {
         val channel = NotificationChannel(
             CHANNEL_ID,
@@ -32,6 +38,9 @@ class NotificationHelper @Inject constructor(
         notificationManager.createNotificationChannel(channel)
     }
 
+    /**
+     * Shows a notification for the given memo.
+     */
     fun showNotification(memo: Memo) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             val hasPermission = ContextCompat.checkSelfPermission(
@@ -41,8 +50,8 @@ class NotificationHelper @Inject constructor(
 
             if (!hasPermission) {
                 Log.w(
-                    "NotificationHelper",
-                    "Skipping notify for memo ${memo.id}: no POST_NOTIFICATIONS permission"
+                    TAG,
+                    "Notification permission not granted. Cannot show notification"
                 )
                 return
             }
@@ -56,15 +65,14 @@ class NotificationHelper @Inject constructor(
             .setContentText(memo.description.take(NUMBER_OF_CHARACTERS))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
-
         notificationManager.notify(notificationId, builder.build())
-        Log.i("NotificationHelper", "Notification shown for memo ID: ${memo.id}")
     }
 
-    companion object {
-        private const val CHANNEL_ID = "memo_location_channel"
-        private const val CHANNEL_NAME = "Location Reminders"
-        private const val CHANNEL_DESCRIPTION = "Notifications for location-based memos"
-        private const val NUMBER_OF_CHARACTERS = 100
+    private companion object {
+        const val CHANNEL_ID = "memo_location_channel"
+        const val CHANNEL_NAME = "Location Reminders"
+        const val CHANNEL_DESCRIPTION = "Notifications for location-based memos"
+        const val NUMBER_OF_CHARACTERS = 100
+        const val TAG = "NotificationHelper"
     }
 }

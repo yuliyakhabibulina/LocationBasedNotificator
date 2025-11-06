@@ -6,6 +6,9 @@ import com.sap.codelab.presentation.mapper.fromUI
 import com.sap.codelab.presentation.model.MemoUI
 import javax.inject.Inject
 
+/**
+ * UseCase to save a memo to the database.
+ */
 class SaveMemoUseCase @Inject constructor(
     private val memoRepository: MemoRepository,
     private val geofenceRepository: GeofenceRepository
